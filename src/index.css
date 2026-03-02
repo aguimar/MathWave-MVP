@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-slate-800/60 backdrop-blur-md border border-slate-700/50 shadow-xl;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #0f172a; /* Custom dark slate for fallback */
+  color: #f8fafc;
+}

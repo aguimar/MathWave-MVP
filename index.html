@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MathWave - Educational Waves Dashboard</title>
+  </head>
+  <body class="bg-slate-900 text-white antialiased">
+    <div id="root"></div>
+    <script>
+      window.addEventListener('error', (event) => {
+        document.body.innerHTML += `<div style="background:red;color:white;padding:20px;position:absolute;top:0;left:0;z-index:9999;"><h3>Global Error</h3><pre>${event.error ? event.error.stack : event.message}</pre></div>`;
+      });
+      console.log('MathWave Index HTML Loaded!');
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
