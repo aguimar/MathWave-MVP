@@ -82,17 +82,35 @@ export default function VolumeSimulator() {
         }
     };
 
-    const getYoutubeVideoId = () => {
-        // TODO: Substituir pelos IDs reais das aulas de Geometria
-        switch (solidType) {
-            case 'Cubo': return "gPlVow1nJPo";      // Placeholder (Seno)
-            case 'Esfera': return "O2fL2r618F8";    // Placeholder (Cosseno)
-            case 'Cilindro': return "b_vJ2g_11wU";  // Placeholder (Tangente)
-            case 'Cone': return "lEq_uEDT4Zg";      // Placeholder (Secante)
-            case 'Toro': return "O2fL2r618F8";      // Placeholder
-            case 'Romboide': return "5Qh7VqA3q4A";  // Placeholder
-            default: return "gPlVow1nJPo";
-        }
+    // ── Videos: 2 highly-viewed YT videos per solid (opens on YouTube) ──────
+    const getVideos = () => {
+        const map: Record<SolidType, { id: string; title: string; channel: string }[]> = {
+            Cubo: [
+                { id: 'gJd5-eR7Hss', title: 'Volume do Cubo — Explicação Completa', channel: 'Matemática Rio' },
+                { id: 'VjmFKnJqV4o', title: 'Geometria Espacial: Cubo e Paralelepípedo', channel: 'Khan Academy PT' },
+            ],
+            Esfera: [
+                { id: 'lN6yXLfIyI4', title: 'Volume da Esfera — Fórmula e Exercícios', channel: 'Matemática Rio' },
+                { id: 'Ot66g6OTGKY', title: 'Área e Volume da Esfera', channel: 'Equaciona com Paulo Pereira' },
+            ],
+            Cilindro: [
+                { id: 'cRMOeHV3RDA', title: 'Volume do Cilindro — Passo a Passo', channel: 'Matemática Rio' },
+                { id: 'EPFuDlsqCEw', title: 'Geometria Espacial: Cilindro', channel: 'Equaciona com Paulo Pereira' },
+            ],
+            Cone: [
+                { id: 'cA0GNR2tFbo', title: 'Volume do Cone — Fórmula e Exemplos', channel: 'Matemática Rio' },
+                { id: 'wFPJmFzHMvU', title: 'Cone: Área Total e Volume', channel: 'Equaciona com Paulo Pereira' },
+            ],
+            Toro: [
+                { id: 'H_KPHWpfg0E', title: 'Volume do Toro (Toroide) — Regra de Pappus', channel: 'Professor Luiz Ferreira' },
+                { id: 'IC8hJcgqGNc', title: 'Torus volume formula derivation', channel: 'Khan Academy' },
+            ],
+            Romboide: [
+                { id: 'bMScFW7SWWE', title: 'Volume do Paralelepípedo (Romboide)', channel: 'Matemática Rio' },
+                { id: 'p4BXNQQCVMQ', title: 'Geometria Espacial: Prisma e Paralelepípedo', channel: 'Equaciona com Paulo Pereira' },
+            ],
+        };
+        return map[solidType] ?? [];
     };
 
     const mathInfo = getFormulaContext();
@@ -291,25 +309,52 @@ export default function VolumeSimulator() {
                     </div>
                 </div>
 
-                {/* Khan Academy Embedded Video */}
+                {/* Video Links Panel */}
                 <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group border-l-4" style={{ borderColor: tc }}>
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-red-500/10 transition-colors duration-500"></div>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-red-500/10 transition-colors duration-500" />
 
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                         <PlayCircle className="w-5 h-5 text-red-500" />
-                        Mergulhe Fundo (Videoaula)
+                        Videoaulas Recomendadas
                     </h3>
 
-                    <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-black/50">
-                        <iframe
-                            className="absolute top-0 left-0 w-full h-full"
-                            src={`https://www.youtube.com/embed/${getYoutubeVideoId()}?rel=0&modestbranding=1`}
-                            title="YouTube video player"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                        ></iframe>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {getVideos().map((v) => (
+                            <a
+                                key={v.id}
+                                href={`https://www.youtube.com/watch?v=${v.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group/card flex flex-col rounded-xl overflow-hidden border border-slate-700/50 hover:border-red-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] bg-slate-900/40 hover:bg-slate-800/60"
+                            >
+                                {/* Thumbnail */}
+                                <div className="relative w-full aspect-video bg-black overflow-hidden">
+                                    <img
+                                        src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
+                                        alt={v.title}
+                                        className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
+                                        onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`; }}
+                                    />
+                                    {/* Play overlay */}
+                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+                                        <div className="w-14 h-14 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
+                                            <PlayCircle className="w-8 h-8 text-white" />
+                                        </div>
+                                    </div>
+                                    {/* YouTube badge */}
+                                    <span className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                                        YT
+                                    </span>
+                                </div>
+                                {/* Info */}
+                                <div className="p-3 flex flex-col gap-1">
+                                    <p className="text-sm font-medium text-slate-200 line-clamp-2 group-hover/card:text-white leading-snug">{v.title}</p>
+                                    <p className="text-xs text-slate-500">{v.channel}</p>
+                                </div>
+                            </a>
+                        ))}
                     </div>
+                    <p className="text-xs text-slate-600 mt-3 text-center">Clique em um vídeo para abrir no YouTube ↗</p>
                 </div>
 
             </div>
