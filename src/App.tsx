@@ -5,6 +5,7 @@ import PropertiesDashboard from './PropertiesDashboard';
 import PropertiesReciprocalDashboard from './PropertiesReciprocalDashboard';
 import VolumeSimulator from './VolumeSimulator';
 import TrigCircle from './TrigCircle';
+import LogDashboard from './LogDashboard';
 import Sidebar, { ViewType } from './Sidebar';
 
 type FunctionType = 'Seno' | 'Cosseno' | 'Tangente' | 'Secante' | 'Cossecante' | 'Cotangente';
@@ -723,6 +724,7 @@ export default function App() {
                 {currentView === 'reciprocals' && <PropertiesReciprocalDashboard />}
                 {currentView === 'volumes' && <VolumeSimulator />}
                 {currentView === 'trigcircle' && <TrigCircle />}
+                {currentView === 'logdash' && <LogDashboard />}
 
             </main>
         </div >

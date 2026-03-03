@@ -1,6 +1,6 @@
-import { Activity, LayoutDashboard, Calculator, Library, Box, Layers, Binary, CircleDot } from 'lucide-react';
+import { Activity, LayoutDashboard, Calculator, Library, Box, Layers, Binary, CircleDot, TrendingUp } from 'lucide-react';
 
-export type ViewType = 'simulator' | 'properties' | 'reciprocals' | 'volumes' | 'trigcircle';
+export type ViewType = 'simulator' | 'properties' | 'reciprocals' | 'volumes' | 'trigcircle' | 'logdash';
 
 interface SidebarProps {
     currentView: ViewType;
@@ -92,6 +92,26 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
                         >
                             <Layers className="w-4 h-4" />
                             Volume dos Sólidos
+                        </button>
+                    </div>
+                </div>
+
+                {/* Algebra Group */}
+                <div>
+                    <h3 className="px-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <TrendingUp className="w-3 h-3" />
+                        Álgebra
+                    </h3>
+                    <div className="space-y-1">
+                        <button
+                            onClick={() => setCurrentView('logdash')}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${currentView === 'logdash'
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transparent border border-transparent'
+                                }`}
+                        >
+                            <TrendingUp className="w-4 h-4" />
+                            Logaritmos & Exponenciais
                         </button>
                     </div>
                 </div>
