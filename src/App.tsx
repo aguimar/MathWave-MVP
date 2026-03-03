@@ -1,8 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, Tooltip, ReferenceDot } from 'recharts';
 import { Activity, RotateCcw, Circle as CircleIcon, LayoutDashboard, Calculator, Library, Triangle, Box } from 'lucide-react';
-import PropertiesDashboard from './PropertiesDashboard';
-import PropertiesReciprocalDashboard from './PropertiesReciprocalDashboard';
+import TrigProperties from './TrigProperties';
 import VolumeSimulator from './VolumeSimulator';
 import TrigCircle from './TrigCircle';
 import LogDashboard from './LogDashboard';
@@ -720,8 +719,7 @@ export default function App() {
                 ) : null
                 }
 
-                {currentView === 'properties' && <PropertiesDashboard />}
-                {currentView === 'reciprocals' && <PropertiesReciprocalDashboard />}
+                {currentView === 'properties' && <TrigProperties />}
                 {currentView === 'volumes' && <VolumeSimulator />}
                 {currentView === 'trigcircle' && <TrigCircle />}
                 {currentView === 'logdash' && <LogDashboard />}
