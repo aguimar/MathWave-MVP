@@ -5,6 +5,7 @@ import TrigProperties from './TrigProperties';
 import VolumeSimulator from './VolumeSimulator';
 import TrigCircle from './TrigCircle';
 import LogDashboard from './LogDashboard';
+import LogExplainer from './LogExplainer';
 import Sidebar, { ViewType } from './Sidebar';
 
 type FunctionType = 'Seno' | 'Cosseno' | 'Tangente' | 'Secante' | 'Cossecante' | 'Cotangente';
@@ -759,6 +760,7 @@ export default function App() {
                 {currentView === 'volumes' && <VolumeSimulator />}
                 {currentView === 'trigcircle' && <TrigCircle />}
                 {currentView === 'logdash' && <LogDashboard />}
+                {currentView === 'logexplainer' && <LogExplainer />}
 
             </main>
         </div >
