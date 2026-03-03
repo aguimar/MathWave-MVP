@@ -251,32 +251,32 @@ export default function App() {
         }
     };
 
-    // ── Videos: 2 curated YT videos per trig function ────────────────
+    // ── Videos: 2 verified YT videos per trig function ────────────────
     const getVideos = () => {
         const map: Record<FunctionType, { id: string; title: string; channel: string }[]> = {
             Seno: [
-                { id: 'p4BXNQQCVMQ', title: 'Função Seno — Gráfico e Propriedades', channel: 'Matemática Rio' },
-                { id: 'gPlVow1nJPo', title: 'Introdução ao Seno e Cosseno', channel: 'Khan Academy PT' },
+                { id: 'FwTbL4hewlY', title: 'FUNÇÃO SENO | RÁPIDO E FÁCIL', channel: 'Dicasdemat Sandro Curió' },
+                { id: 'vUvWnRDcBrc', title: 'FUNÇÃO COSSENO | RÁPIDO E FÁCIL', channel: 'Dicasdemat Sandro Curió' },
             ],
             Cosseno: [
-                { id: 'Ot66g6OTGKY', title: 'Função Cosseno — Gráfico e Propriedades', channel: 'Matemática Rio' },
-                { id: 'Nb7sbAP1nb8', title: 'Cosseno em Exemplos Práticos', channel: 'Equaciona com Paulo Pereira' },
+                { id: 'vUvWnRDcBrc', title: 'FUNÇÃO COSSENO | RÁPIDO E FÁCIL', channel: 'Dicasdemat Sandro Curió' },
+                { id: 'FwTbL4hewlY', title: 'FUNÇÃO SENO | RÁPIDO E FÁCIL', channel: 'Dicasdemat Sandro Curió' },
             ],
             Tangente: [
-                { id: 'EPFuDlsqCEw', title: 'Função Tangente — Gráfico e Assíntotas', channel: 'Matemática Rio' },
-                { id: 'FtDpbILOx_Y', title: 'Tangente: Definição e Gráfico', channel: 'Prof. Luiz Ferreira' },
+                { id: 'aZwiSteCpck', title: 'FUNÇÃO TANGENTE (Domínio, Imagem, Período e Paridade)', channel: 'Equaciona Com Paulo Pereira' },
+                { id: 'Q3GU5qWQUT0', title: 'COTANGENTE, SECANTE E COSSECANTE (c/ Exemplos)', channel: 'Equaciona Com Paulo Pereira' },
             ],
             Secante: [
-                { id: 'cRMOeHV3RDA', title: 'Secante e Cossecante — Propriedades', channel: 'Matemática Rio' },
-                { id: 'zJ_X_yL02T4', title: 'Graphing Secant and Cosecant', channel: 'Khan Academy' },
+                { id: 'Q3GU5qWQUT0', title: 'COTANGENTE, SECANTE E COSSECANTE (c/ Exemplos)', channel: 'Equaciona Com Paulo Pereira' },
+                { id: 'aZwiSteCpck', title: 'FUNÇÃO TANGENTE — Domínio, Imagem, Período', channel: 'Equaciona Com Paulo Pereira' },
             ],
             Cossecante: [
-                { id: 'lN6yXLfIyI4', title: 'Cossecante — Definição e Gráfico', channel: 'Equaciona com Paulo Pereira' },
-                { id: 'zJ_X_yL02T4', title: 'Graphing Secant and Cosecant', channel: 'Khan Academy' },
+                { id: 'Q3GU5qWQUT0', title: 'COTANGENTE, SECANTE E COSSECANTE (c/ Exemplos)', channel: 'Equaciona Com Paulo Pereira' },
+                { id: 'a4r-6LbDl7A', title: 'TRIGONOMETRIA — FUNÇÃO COTANGENTE', channel: 'Pierre Goebel' },
             ],
             Cotangente: [
-                { id: 'cA0GNR2tFbo', title: 'Cotangente — Gráfico e Propriedades', channel: 'Matemática Rio' },
-                { id: 'n5x1y1c1n8c', title: 'Graphing Cotangent', channel: 'Khan Academy' },
+                { id: 'a4r-6LbDl7A', title: 'TRIGONOMETRIA — FUNÇÃO COTANGENTE', channel: 'Pierre Goebel' },
+                { id: 'Q3GU5qWQUT0', title: 'COTANGENTE, SECANTE E COSSECANTE (c/ Exemplos)', channel: 'Equaciona Com Paulo Pereira' },
             ],
         };
         return map[funcType] ?? [];

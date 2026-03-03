@@ -82,32 +82,32 @@ export default function VolumeSimulator() {
         }
     };
 
-    // ── Videos: 2 highly-viewed YT videos per solid (opens on YouTube) ──────
+    // ── Videos: 2 verified YT videos per solid (opens on YouTube) ─────────
     const getVideos = () => {
         const map: Record<SolidType, { id: string; title: string; channel: string }[]> = {
             Cubo: [
-                { id: 'gJd5-eR7Hss', title: 'Volume do Cubo — Explicação Completa', channel: 'Matemática Rio' },
-                { id: 'VjmFKnJqV4o', title: 'Geometria Espacial: Cubo e Paralelepípedo', channel: 'Khan Academy PT' },
+                { id: 'uJgbLhhWrZo', title: 'Geometria Espacial 04: Volume do Cubo', channel: 'Matemática no Papel' },
+                { id: 'JRDBMV6YM4E', title: 'Geometria Espacial 06: Volume do Paralelepípedo', channel: 'Matemática no Papel' },
             ],
             Esfera: [
-                { id: 'lN6yXLfIyI4', title: 'Volume da Esfera — Fórmula e Exercícios', channel: 'Matemática Rio' },
-                { id: 'Ot66g6OTGKY', title: 'Área e Volume da Esfera', channel: 'Equaciona com Paulo Pereira' },
+                { id: 'Pk-IOSEQ8sQ', title: 'FÁCIL e RÁPIDO | ESFERA | GEOMETRIA ESPACIAL', channel: 'Dicasdemat Sandro Curió' },
+                { id: 'uJgbLhhWrZo', title: 'Geometria Espacial: Sólidos e Volumes', channel: 'Matemática no Papel' },
             ],
             Cilindro: [
-                { id: 'cRMOeHV3RDA', title: 'Volume do Cilindro — Passo a Passo', channel: 'Matemática Rio' },
-                { id: 'EPFuDlsqCEw', title: 'Geometria Espacial: Cilindro', channel: 'Equaciona com Paulo Pereira' },
+                { id: 'sFWBwWg2szE', title: 'CILINDRO | GEOMETRIA ESPACIAL', channel: 'Dicasdemat Sandro Curió' },
+                { id: 'Pk-IOSEQ8sQ', title: 'ESFERA | GEOMETRIA ESPACIAL', channel: 'Dicasdemat Sandro Curió' },
             ],
             Cone: [
-                { id: 'cA0GNR2tFbo', title: 'Volume do Cone — Fórmula e Exemplos', channel: 'Matemática Rio' },
-                { id: 'wFPJmFzHMvU', title: 'Cone: Área Total e Volume', channel: 'Equaciona com Paulo Pereira' },
+                { id: '67IM72aHevg', title: 'CONE | GEOMETRIA ESPACIAL | RÁPIDO E FÁCIL', channel: 'Dicasdemat Sandro Curió' },
+                { id: 'sFWBwWg2szE', title: 'CILINDRO | GEOMETRIA ESPACIAL', channel: 'Dicasdemat Sandro Curió' },
             ],
             Toro: [
-                { id: 'H_KPHWpfg0E', title: 'Volume do Toro (Toroide) — Regra de Pappus', channel: 'Professor Luiz Ferreira' },
-                { id: 'IC8hJcgqGNc', title: 'Torus volume formula derivation', channel: 'Khan Academy' },
+                { id: 'Gr3fx2BfD9w', title: 'Cálculo do Volume do TORO', channel: 'Prof. Me Daniel — Matemática' },
+                { id: '67IM72aHevg', title: 'CONE | GEOMETRIA ESPACIAL | RÁPIDO E FÁCIL', channel: 'Dicasdemat Sandro Curió' },
             ],
             Romboide: [
-                { id: 'bMScFW7SWWE', title: 'Volume do Paralelepípedo (Romboide)', channel: 'Matemática Rio' },
-                { id: 'p4BXNQQCVMQ', title: 'Geometria Espacial: Prisma e Paralelepípedo', channel: 'Equaciona com Paulo Pereira' },
+                { id: 'JRDBMV6YM4E', title: 'Geometria Espacial 06: Volume do Paralelepípedo', channel: 'Matemática no Papel' },
+                { id: 'uJgbLhhWrZo', title: 'Geometria Espacial 04: Volume do Cubo', channel: 'Matemática no Papel' },
             ],
         };
         return map[solidType] ?? [];
