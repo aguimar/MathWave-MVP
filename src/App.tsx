@@ -4,6 +4,7 @@ import { Activity, RotateCcw, Circle as CircleIcon, LayoutDashboard, Calculator,
 import PropertiesDashboard from './PropertiesDashboard';
 import PropertiesReciprocalDashboard from './PropertiesReciprocalDashboard';
 import VolumeSimulator from './VolumeSimulator';
+import TrigCircle from './TrigCircle';
 import Sidebar, { ViewType } from './Sidebar';
 
 type FunctionType = 'Seno' | 'Cosseno' | 'Tangente' | 'Secante' | 'Cossecante' | 'Cotangente';
@@ -21,7 +22,7 @@ export default function App() {
     const [funcType, setFuncType] = useState<FunctionType>('Seno');
     const [params, setParams] = useState<Parameters>(DEFAULT_PARAMS);
     const [animProgress, setAnimProgress] = useState(0);
-    const [currentView, setCurrentView] = useState<'simulator' | 'properties' | 'reciprocals'>('simulator');
+    const [currentView, setCurrentView] = useState<ViewType>('simulator');
     const [isManualMode, setIsManualMode] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -721,6 +722,7 @@ export default function App() {
                 {currentView === 'properties' && <PropertiesDashboard />}
                 {currentView === 'reciprocals' && <PropertiesReciprocalDashboard />}
                 {currentView === 'volumes' && <VolumeSimulator />}
+                {currentView === 'trigcircle' && <TrigCircle />}
 
             </main>
         </div >

@@ -1,7 +1,6 @@
-import React from 'react';
-import { Activity, LayoutDashboard, Calculator, Library, Box, Layers, Binary } from 'lucide-react';
+import { Activity, LayoutDashboard, Calculator, Library, Box, Layers, Binary, CircleDot } from 'lucide-react';
 
-export type ViewType = 'simulator' | 'properties' | 'reciprocals' | 'volumes';
+export type ViewType = 'simulator' | 'properties' | 'reciprocals' | 'volumes' | 'trigcircle';
 
 interface SidebarProps {
     currentView: ViewType;
@@ -62,6 +61,17 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
                         >
                             <Library className="w-4 h-4" />
                             Funções Inversas
+                        </button>
+
+                        <button
+                            onClick={() => setCurrentView('trigcircle')}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${currentView === 'trigcircle'
+                                ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transparent border border-transparent'
+                                }`}
+                        >
+                            <CircleDot className="w-4 h-4" />
+                            Círculo Trigonométrico
                         </button>
                     </div>
                 </div>
