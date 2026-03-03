@@ -251,21 +251,35 @@ export default function App() {
         }
     };
 
-    const getYoutubeVideoId = () => {
-        switch (funcType) {
-            case 'Seno':
-                return "gPlVow1nJPo"; // Khan Academy Brasil - Seno
-            case 'Cosseno':
-                return "Nb7sbAP1nb8"; // Khan Academy Brasil - Cosseno
-            case 'Tangente':
-                return "FtDpbILOx_Y"; // Khan Academy - Tangente
-            case 'Secante':
-                return "zJ_X_yL02T4"; // Khan Academy - Graphing Secant and Cosecant
-            case 'Cossecante':
-                return "zJ_X_yL02T4"; // Khan Academy - Graphing Secant and Cosecant
-            case 'Cotangente':
-                return "n5x1y1c1n8c"; // Khan Academy - Graphing Cotangent
-        }
+    // ── Videos: 2 curated YT videos per trig function ────────────────
+    const getVideos = () => {
+        const map: Record<FunctionType, { id: string; title: string; channel: string }[]> = {
+            Seno: [
+                { id: 'p4BXNQQCVMQ', title: 'Função Seno — Gráfico e Propriedades', channel: 'Matemática Rio' },
+                { id: 'gPlVow1nJPo', title: 'Introdução ao Seno e Cosseno', channel: 'Khan Academy PT' },
+            ],
+            Cosseno: [
+                { id: 'Ot66g6OTGKY', title: 'Função Cosseno — Gráfico e Propriedades', channel: 'Matemática Rio' },
+                { id: 'Nb7sbAP1nb8', title: 'Cosseno em Exemplos Práticos', channel: 'Equaciona com Paulo Pereira' },
+            ],
+            Tangente: [
+                { id: 'EPFuDlsqCEw', title: 'Função Tangente — Gráfico e Assíntotas', channel: 'Matemática Rio' },
+                { id: 'FtDpbILOx_Y', title: 'Tangente: Definição e Gráfico', channel: 'Prof. Luiz Ferreira' },
+            ],
+            Secante: [
+                { id: 'cRMOeHV3RDA', title: 'Secante e Cossecante — Propriedades', channel: 'Matemática Rio' },
+                { id: 'zJ_X_yL02T4', title: 'Graphing Secant and Cosecant', channel: 'Khan Academy' },
+            ],
+            Cossecante: [
+                { id: 'lN6yXLfIyI4', title: 'Cossecante — Definição e Gráfico', channel: 'Equaciona com Paulo Pereira' },
+                { id: 'zJ_X_yL02T4', title: 'Graphing Secant and Cosecant', channel: 'Khan Academy' },
+            ],
+            Cotangente: [
+                { id: 'cA0GNR2tFbo', title: 'Cotangente — Gráfico e Propriedades', channel: 'Matemática Rio' },
+                { id: 'n5x1y1c1n8c', title: 'Graphing Cotangent', channel: 'Khan Academy' },
+            ],
+        };
+        return map[funcType] ?? [];
     };
 
     return (
@@ -637,21 +651,43 @@ export default function App() {
                                 </p>
                             </div>
 
-                            {/* YouTube Video Panel */}
+                            {/* YouTube Video Cards */}
                             <div className="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col gap-4">
                                 <h3 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
-                                    Mergulhe Fundo (Videoaula Khan Academy)
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" /></svg>
+                                    Videoaulas Recomendadas
                                 </h3>
-                                <div className="relative w-full overflow-hidden rounded-xl border border-slate-700/50" style={{ paddingTop: '56.25%' }}>
-                                    <iframe
-                                        className="absolute top-0 left-0 w-full h-full"
-                                        src={`https://www.youtube.com/embed/${getYoutubeVideoId()}`}
-                                        title="YouTube video player"
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        allowFullScreen>
-                                    </iframe>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {getVideos().map((v) => (
+                                        <a
+                                            key={v.id}
+                                            href={`https://www.youtube.com/watch?v=${v.id}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group/card flex flex-col rounded-xl overflow-hidden border border-slate-700/50 hover:border-red-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] bg-slate-900/40 hover:bg-slate-800/60"
+                                        >
+                                            <div className="relative w-full aspect-video bg-black overflow-hidden">
+                                                <img
+                                                    src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
+                                                    alt={v.title}
+                                                    className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
+                                                    onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`; }}
+                                                />
+                                                <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+                                                    <div className="w-14 h-14 bg-red-600/90 rounded-full flex items-center justify-center shadow-lg">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                                                    </div>
+                                                </div>
+                                                <span className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">YT</span>
+                                            </div>
+                                            <div className="p-3 flex flex-col gap-1">
+                                                <p className="text-sm font-medium text-slate-200 line-clamp-2 group-hover/card:text-white leading-snug">{v.title}</p>
+                                                <p className="text-xs text-slate-500">{v.channel}</p>
+                                            </div>
+                                        </a>
+                                    ))}
                                 </div>
+                                <p className="text-xs text-slate-600 text-center">Clique em um vídeo para abrir no YouTube ↗</p>
                             </div>
 
                         </div>
