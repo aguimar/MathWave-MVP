@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, Tooltip, ReferenceDot } from 'recharts';
-import { Activity, RotateCcw, Circle as CircleIcon, LayoutDashboard, Calculator, Library, Triangle } from 'lucide-react';
+import { Activity, RotateCcw, Circle as CircleIcon, LayoutDashboard, Calculator, Library, Triangle, Box } from 'lucide-react';
 import PropertiesDashboard from './PropertiesDashboard';
 import PropertiesReciprocalDashboard from './PropertiesReciprocalDashboard';
+import VolumeSimulator from './VolumeSimulator';
+import Sidebar, { ViewType } from './Sidebar';
 
 type FunctionType = 'Seno' | 'Cosseno' | 'Tangente' | 'Secante' | 'Cossecante' | 'Cotangente';
 
@@ -264,490 +266,463 @@ export default function App() {
                 return "n5x1y1c1n8c"; // Khan Academy - Graphing Cotangent
         }
     };
-    return (
-        <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8 font-sans transition-colors duration-500">
 
-            {/* Header Area */}
-            <header className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
+    return (
+        <div className="flex h-screen bg-slate-900 text-slate-100 font-sans transition-colors duration-500 overflow-hidden">
+            {/* Sidebar Navigation */}
+            <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
+
+            {/* Main Content Area */}
+            <main className="flex-1 ml-64 p-4 md:p-8 overflow-y-auto no-scrollbar relative">
+
+                {/* Mobile Header Fallback (Optional, but keeping simple for now)
+                <header className="mb-6 md:hidden flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600">
                         <Activity className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                    <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                         MathWave
                     </h1>
-                </div>
+                </header > */}
 
-                <div className="flex bg-slate-800/50 p-1 rounded-xl border border-slate-700/50 backdrop-blur">
-                    <button
-                        onClick={() => setCurrentView('simulator')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${currentView === 'simulator'
-                            ? 'bg-cyan-500/20 text-cyan-300 shadow-sm'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
-                            }`}
-                    >
-                        <LayoutDashboard className="w-4 h-4" />
-                        Simulador
-                    </button>
-                    <button
-                        onClick={() => setCurrentView('properties')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${currentView === 'properties'
-                            ? 'bg-violet-500/20 text-violet-300 shadow-sm'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
-                            }`}
-                    >
-                        <Calculator className="w-4 h-4" />
-                        Propriedades
-                    </button>
-                    <button
-                        onClick={() => setCurrentView('reciprocals')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${currentView === 'reciprocals'
-                            ? 'bg-emerald-500/20 text-emerald-300 shadow-sm'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
-                            }`}
-                    >
-                        <Library className="w-4 h-4" />
-                        Funções Inversas
-                    </button>
-                </div>
-            </header >
+                {currentView === 'simulator' ? (
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-            {currentView === 'simulator' ? (
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        {/* Left Column: Graph and Physics Panel */}
+                        <div className="lg:col-span-3 flex flex-col gap-6">
 
-                    {/* Left Column: Graph and Physics Panel */}
-                    <div className="lg:col-span-3 flex flex-col gap-6">
+                            {/* Main Graph Area */}
+                            <div className="glass-panel rounded-2xl p-6 relative flex flex-col">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-xl font-semibold flex items-center gap-2">
+                                        <Activity className={`w-5 h-5 ${funcType === 'Seno' ? 'text-cyan-400' : funcType === 'Cosseno' ? 'text-violet-400' : 'text-rose-400'}`} />
+                                        Visualização do Gráfico
+                                    </h2>
 
-                        {/* Main Graph Area */}
-                        <div className="glass-panel rounded-2xl p-6 relative flex flex-col">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold flex items-center gap-2">
-                                    <Activity className={`w-5 h-5 ${funcType === 'Seno' ? 'text-cyan-400' : funcType === 'Cosseno' ? 'text-violet-400' : 'text-rose-400'}`} />
-                                    Visualização do Gráfico
-                                </h2>
+                                    {/* Function Selectors */}
+                                    <div className="grid grid-cols-3 md:grid-cols-6 gap-1 bg-slate-900/50 p-1 rounded-xl border border-slate-700/50">
+                                        {(['Seno', 'Cosseno', 'Tangente', 'Secante', 'Cossecante', 'Cotangente'] as FunctionType[]).map((type) => {
+                                            let activeColors = '';
+                                            if (funcType === type) {
+                                                if (type === 'Seno') activeColors = 'bg-cyan-500/20 text-cyan-300';
+                                                else if (type === 'Cosseno') activeColors = 'bg-violet-500/20 text-violet-300';
+                                                else if (type === 'Tangente') activeColors = 'bg-rose-500/20 text-rose-300';
+                                                else if (type === 'Secante') activeColors = 'bg-emerald-500/20 text-emerald-300';
+                                                else if (type === 'Cossecante') activeColors = 'bg-amber-500/20 text-amber-300';
+                                                else if (type === 'Cotangente') activeColors = 'bg-fuchsia-500/20 text-fuchsia-300';
+                                            }
 
-                                {/* Function Selectors */}
-                                <div className="grid grid-cols-3 md:grid-cols-6 gap-1 bg-slate-900/50 p-1 rounded-xl border border-slate-700/50">
-                                    {(['Seno', 'Cosseno', 'Tangente', 'Secante', 'Cossecante', 'Cotangente'] as FunctionType[]).map((type) => {
-                                        let activeColors = '';
-                                        if (funcType === type) {
-                                            if (type === 'Seno') activeColors = 'bg-cyan-500/20 text-cyan-300';
-                                            else if (type === 'Cosseno') activeColors = 'bg-violet-500/20 text-violet-300';
-                                            else if (type === 'Tangente') activeColors = 'bg-rose-500/20 text-rose-300';
-                                            else if (type === 'Secante') activeColors = 'bg-emerald-500/20 text-emerald-300';
-                                            else if (type === 'Cossecante') activeColors = 'bg-amber-500/20 text-amber-300';
-                                            else if (type === 'Cotangente') activeColors = 'bg-fuchsia-500/20 text-fuchsia-300';
-                                        }
-
-                                        return (
-                                            <button
-                                                key={type}
-                                                onClick={() => setFuncType(type)}
-                                                className={`
+                                            return (
+                                                <button
+                                                    key={type}
+                                                    onClick={() => setFuncType(type)}
+                                                    className={`
                                                 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 text-center
                                                 ${funcType === type ? activeColors : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'}
                                                 `}
-                                            >
-                                                {type}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            <div className="h-[400px] w-full">
-                                {/* Flex container for Unit Circle and LineChart */}
-                                <div className="flex flex-col md:flex-row gap-6 w-full h-[350px]">
-
-                                    {/* Animated Unit Circle */}
-                                    <div className="w-[150px] md:w-[200px] h-full flex-shrink-0 flex items-center justify-center relative bg-slate-900/40 rounded-xl border border-slate-700/50 overflow-hidden group">
-
-                                        {/* Interaction Overlay Banner */}
-                                        <div className="absolute top-0 left-0 w-full p-2 bg-gradient-to-b from-slate-900/80 to-transparent z-10 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={() => setIsManualMode(!isManualMode)}
-                                                className="text-[10px] font-medium text-slate-300 hover:text-white bg-slate-800/80 px-2 py-1 rounded shadow"
-                                            >
-                                                {isManualMode ? '▶ Auto' : '⏸ Pausar'}
-                                            </button>
-                                        </div>
-
-                                        <svg
-                                            viewBox="-1.2 -1.2 2.4 2.4"
-                                            className={`w-[80%] h-[80%] overflow-visible ${isManualMode ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
-                                            onPointerDown={handlePointerDown}
-                                            onPointerMove={handlePointerMove}
-                                            onPointerUp={handlePointerUp}
-                                            onPointerLeave={handlePointerUp}
-                                        >
-                                            {/* Axes */}
-                                            <line x1="-1.2" y1="0" x2="1.2" y2="0" stroke="#475569" strokeWidth="0.02" />
-                                            <line x1="0" y1="-1.2" x2="0" y2="1.2" stroke="#475569" strokeWidth="0.02" />
-
-                                            {/* The Circle */}
-                                            <circle cx="0" cy="0" r="1" fill="transparent" stroke="#334155" strokeWidth="0.03" />
-
-                                            {/* Dynamic Angle Vector */}
-                                            <line
-                                                x1="0"
-                                                y1="0"
-                                                x2={Math.cos(animatedDotConfig.x)}
-                                                y2={-Math.sin(animatedDotConfig.x)}
-                                                stroke={getThemeColor()}
-                                                strokeWidth="0.04"
-                                                strokeLinecap="round"
-                                                className="transition-none pointer-events-none"
-                                            />
-
-                                            {/* Tracing Dot on Circumference */}
-                                            <circle
-                                                cx={Math.cos(animatedDotConfig.x)}
-                                                cy={-Math.sin(animatedDotConfig.x)}
-                                                r="0.08"
-                                                fill="#fff"
-                                                stroke={getThemeColor()}
-                                                strokeWidth="0.04"
-                                                className="transition-none shadow-lg drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]"
-                                            />
-
-                                            {/* Projection Lines based on Function Type */}
-                                            {(() => {
-                                                const cosVal = Math.cos(animatedDotConfig.x);
-                                                const sinVal = Math.sin(animatedDotConfig.x);
-                                                // Cap the geometric extensions so SVG viewBox doesn't explode at asymptotes
-                                                let safeSec = Math.abs(cosVal) < 0.01 ? 100 * Math.sign(cosVal) : 1 / cosVal;
-                                                let safeCsc = Math.abs(sinVal) < 0.01 ? 100 * Math.sign(sinVal) : 1 / sinVal;
-
-                                                if (safeSec > 3.5) safeSec = 3.5;
-                                                if (safeSec < -3.5) safeSec = -3.5;
-
-                                                if (safeCsc > 3.5) safeCsc = 3.5;
-                                                if (safeCsc < -3.5) safeCsc = -3.5;
-
-                                                return (
-                                                    <>
-                                                        {funcType === 'Seno' && (
-                                                            <line
-                                                                x1={cosVal} y1={-sinVal} x2={cosVal} y2="0"
-                                                                stroke="#06b6d4" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
-                                                            />
-                                                        )}
-                                                        {funcType === 'Cosseno' && (
-                                                            <line
-                                                                x1={cosVal} y1={-sinVal} x2="0" y2={-sinVal}
-                                                                stroke="#8b5cf6" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
-                                                            />
-                                                        )}
-                                                        {funcType === 'Tangente' && (
-                                                            <line
-                                                                x1={cosVal} y1={-sinVal} x2={safeSec} y2="0"
-                                                                stroke="#f43f5e" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
-                                                            />
-                                                        )}
-                                                        {funcType === 'Secante' && (
-                                                            <>
-                                                                <line x1={cosVal} y1={-sinVal} x2={safeSec} y2="0" stroke="#f43f5e" strokeWidth="0.015" strokeDasharray="0.05,0.05" className="opacity-40" />
-                                                                <line x1="0" y1="0" x2={safeSec} y2="0" stroke="#10b981" strokeWidth="0.04" strokeDasharray="0.05,0.05" className="opacity-90" />
-                                                            </>
-                                                        )}
-                                                        {funcType === 'Cotangente' && (
-                                                            <line
-                                                                x1={cosVal} y1={-sinVal} x2="0" y2={-safeCsc}
-                                                                stroke="#d946ef" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
-                                                            />
-                                                        )}
-                                                        {funcType === 'Cossecante' && (
-                                                            <>
-                                                                <line x1={cosVal} y1={-sinVal} x2="0" y2={-safeCsc} stroke="#d946ef" strokeWidth="0.015" strokeDasharray="0.05,0.05" className="opacity-40" />
-                                                                <line x1="0" y1="0" x2="0" y2={-safeCsc} stroke="#f59e0b" strokeWidth="0.04" strokeDasharray="0.05,0.05" className="opacity-90" />
-                                                            </>
-                                                        )}
-                                                    </>
-                                                );
-                                            })()}
-                                        </svg>
-
-                                        <div className="absolute top-2 left-2 text-[10px] text-slate-500 font-mono">
-                                            Círculo Unitário
-                                        </div>
+                                                >
+                                                    {type}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
+                                </div>
 
-                                    {/* Recharts Graph */}
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <LineChart
-                                            data={data}
-                                            margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
-                                        >        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={true} horizontal={true} />
+                                <div className="h-[400px] w-full">
+                                    {/* Flex container for Unit Circle and LineChart */}
+                                    <div className="flex flex-col md:flex-row gap-6 w-full h-[350px]">
 
-                                            {/* Customizing Ticks for PI */}
-                                            <XAxis
-                                                dataKey="x"
-                                                type="number"
-                                                domain={[-2 * Math.PI, 2 * Math.PI]}
-                                                ticks={[-2 * Math.PI, -Math.PI, 0, Math.PI, 2 * Math.PI]}
-                                                tickFormatter={(val) => {
-                                                    if (val === 0) return '0';
-                                                    const piRatio = val / Math.PI;
-                                                    if (piRatio === 1) return 'π';
-                                                    if (piRatio === -1) return '-π';
-                                                    return `${piRatio}π`;
-                                                }}
-                                                stroke="#64748b"
-                                                angle={0}
-                                                dy={10}
-                                            />
+                                        {/* Animated Unit Circle */}
+                                        <div className="w-[150px] md:w-[200px] h-full flex-shrink-0 flex items-center justify-center relative bg-slate-900/40 rounded-xl border border-slate-700/50 overflow-hidden group">
 
-                                            <YAxis
-                                                domain={[-5, 5]}
-                                                allowDataOverflow
-                                                stroke="#64748b"
-                                                dx={-10}
-                                            />
+                                            {/* Interaction Overlay Banner */}
+                                            <div className="absolute top-0 left-0 w-full p-2 bg-gradient-to-b from-slate-900/80 to-transparent z-10 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    onClick={() => setIsManualMode(!isManualMode)}
+                                                    className="text-[10px] font-medium text-slate-300 hover:text-white bg-slate-800/80 px-2 py-1 rounded shadow"
+                                                >
+                                                    {isManualMode ? '▶ Auto' : '⏸ Pausar'}
+                                                </button>
+                                            </div>
 
-                                            <ReferenceLine y={0} stroke="#94a3b8" opacity={0.5} strokeWidth={2} />
-                                            <ReferenceLine x={0} stroke="#94a3b8" opacity={0.5} strokeWidth={2} />
+                                            <svg
+                                                viewBox="-1.2 -1.2 2.4 2.4"
+                                                className={`w-[80%] h-[80%] overflow-visible ${isManualMode ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
+                                                onPointerDown={handlePointerDown}
+                                                onPointerMove={handlePointerMove}
+                                                onPointerUp={handlePointerUp}
+                                                onPointerLeave={handlePointerUp}
+                                            >
+                                                {/* Axes */}
+                                                <line x1="-1.2" y1="0" x2="1.2" y2="0" stroke="#475569" strokeWidth="0.02" />
+                                                <line x1="0" y1="-1.2" x2="0" y2="1.2" stroke="#475569" strokeWidth="0.02" />
 
-                                            <Tooltip
-                                                contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '0.5rem', color: '#f8fafc' }}
-                                                itemStyle={{ color: getThemeColor() }}
-                                                labelFormatter={(label) => `x: ${(Number(label) / Math.PI).toFixed(2)}π`}
-                                            />
+                                                {/* The Circle */}
+                                                <circle cx="0" cy="0" r="1" fill="transparent" stroke="#334155" strokeWidth="0.03" />
 
-                                            <Line
-                                                type="monotone"
-                                                dataKey="y"
-                                                stroke={getThemeColor()}
-                                                strokeWidth={3}
-                                                dot={false}
-                                                isAnimationActive={true}
-                                                animationDuration={600}
-                                                connectNulls={false} // Crucial for breaking the line on Tangent asymptotes
-                                                activeDot={{ r: 6, fill: getThemeColor(), stroke: '#0f172a', strokeWidth: 2 }}
-                                            />
+                                                {/* Dynamic Angle Vector */}
+                                                <line
+                                                    x1="0"
+                                                    y1="0"
+                                                    x2={Math.cos(animatedDotConfig.x)}
+                                                    y2={-Math.sin(animatedDotConfig.x)}
+                                                    stroke={getThemeColor()}
+                                                    strokeWidth="0.04"
+                                                    strokeLinecap="round"
+                                                    className="transition-none pointer-events-none"
+                                                />
 
-                                            {/* Animated Tracing Dot */}
-                                            {animatedDotConfig.y !== null && (
-                                                <ReferenceDot
-                                                    x={animatedDotConfig.x}
-                                                    y={animatedDotConfig.y as number}
-                                                    r={6}
+                                                {/* Tracing Dot on Circumference */}
+                                                <circle
+                                                    cx={Math.cos(animatedDotConfig.x)}
+                                                    cy={-Math.sin(animatedDotConfig.x)}
+                                                    r="0.08"
                                                     fill="#fff"
                                                     stroke={getThemeColor()}
-                                                    strokeWidth={3}
-                                                    isFront={true}
-                                                    className="transition-none shadow-xl drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                                                    strokeWidth="0.04"
+                                                    className="transition-none shadow-lg drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]"
                                                 />
-                                            )}
-                                        </LineChart>
-                                    </ResponsiveContainer>
+
+                                                {/* Projection Lines based on Function Type */}
+                                                {(() => {
+                                                    const cosVal = Math.cos(animatedDotConfig.x);
+                                                    const sinVal = Math.sin(animatedDotConfig.x);
+                                                    // Cap the geometric extensions so SVG viewBox doesn't explode at asymptotes
+                                                    let safeSec = Math.abs(cosVal) < 0.01 ? 100 * Math.sign(cosVal) : 1 / cosVal;
+                                                    let safeCsc = Math.abs(sinVal) < 0.01 ? 100 * Math.sign(sinVal) : 1 / sinVal;
+
+                                                    if (safeSec > 3.5) safeSec = 3.5;
+                                                    if (safeSec < -3.5) safeSec = -3.5;
+
+                                                    if (safeCsc > 3.5) safeCsc = 3.5;
+                                                    if (safeCsc < -3.5) safeCsc = -3.5;
+
+                                                    return (
+                                                        <>
+                                                            {funcType === 'Seno' && (
+                                                                <line
+                                                                    x1={cosVal} y1={-sinVal} x2={cosVal} y2="0"
+                                                                    stroke="#06b6d4" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
+                                                                />
+                                                            )}
+                                                            {funcType === 'Cosseno' && (
+                                                                <line
+                                                                    x1={cosVal} y1={-sinVal} x2="0" y2={-sinVal}
+                                                                    stroke="#8b5cf6" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
+                                                                />
+                                                            )}
+                                                            {funcType === 'Tangente' && (
+                                                                <line
+                                                                    x1={cosVal} y1={-sinVal} x2={safeSec} y2="0"
+                                                                    stroke="#f43f5e" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
+                                                                />
+                                                            )}
+                                                            {funcType === 'Secante' && (
+                                                                <>
+                                                                    <line x1={cosVal} y1={-sinVal} x2={safeSec} y2="0" stroke="#f43f5e" strokeWidth="0.015" strokeDasharray="0.05,0.05" className="opacity-40" />
+                                                                    <line x1="0" y1="0" x2={safeSec} y2="0" stroke="#10b981" strokeWidth="0.04" strokeDasharray="0.05,0.05" className="opacity-90" />
+                                                                </>
+                                                            )}
+                                                            {funcType === 'Cotangente' && (
+                                                                <line
+                                                                    x1={cosVal} y1={-sinVal} x2="0" y2={-safeCsc}
+                                                                    stroke="#d946ef" strokeWidth="0.03" strokeDasharray="0.05,0.05" className="opacity-70"
+                                                                />
+                                                            )}
+                                                            {funcType === 'Cossecante' && (
+                                                                <>
+                                                                    <line x1={cosVal} y1={-sinVal} x2="0" y2={-safeCsc} stroke="#d946ef" strokeWidth="0.015" strokeDasharray="0.05,0.05" className="opacity-40" />
+                                                                    <line x1="0" y1="0" x2="0" y2={-safeCsc} stroke="#f59e0b" strokeWidth="0.04" strokeDasharray="0.05,0.05" className="opacity-90" />
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    );
+                                                })()}
+                                            </svg>
+
+                                            <div className="absolute top-2 left-2 text-[10px] text-slate-500 font-mono">
+                                                Círculo Unitário
+                                            </div>
+                                        </div>
+
+                                        {/* Recharts Graph */}
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <LineChart
+                                                data={data}
+                                                margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
+                                            >        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={true} horizontal={true} />
+
+                                                {/* Customizing Ticks for PI */}
+                                                <XAxis
+                                                    dataKey="x"
+                                                    type="number"
+                                                    domain={[-2 * Math.PI, 2 * Math.PI]}
+                                                    ticks={[-2 * Math.PI, -Math.PI, 0, Math.PI, 2 * Math.PI]}
+                                                    tickFormatter={(val) => {
+                                                        if (val === 0) return '0';
+                                                        const piRatio = val / Math.PI;
+                                                        if (piRatio === 1) return 'π';
+                                                        if (piRatio === -1) return '-π';
+                                                        return `${piRatio}π`;
+                                                    }}
+                                                    stroke="#64748b"
+                                                    angle={0}
+                                                    dy={10}
+                                                />
+
+                                                <YAxis
+                                                    domain={[-5, 5]}
+                                                    allowDataOverflow
+                                                    stroke="#64748b"
+                                                    dx={-10}
+                                                />
+
+                                                <ReferenceLine y={0} stroke="#94a3b8" opacity={0.5} strokeWidth={2} />
+                                                <ReferenceLine x={0} stroke="#94a3b8" opacity={0.5} strokeWidth={2} />
+
+                                                <Tooltip
+                                                    contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '0.5rem', color: '#f8fafc' }}
+                                                    itemStyle={{ color: getThemeColor() }}
+                                                    labelFormatter={(label) => `x: ${(Number(label) / Math.PI).toFixed(2)}π`}
+                                                />
+
+                                                <Line
+                                                    type="monotone"
+                                                    dataKey="y"
+                                                    stroke={getThemeColor()}
+                                                    strokeWidth={3}
+                                                    dot={false}
+                                                    isAnimationActive={true}
+                                                    animationDuration={600}
+                                                    connectNulls={false} // Crucial for breaking the line on Tangent asymptotes
+                                                    activeDot={{ r: 6, fill: getThemeColor(), stroke: '#0f172a', strokeWidth: 2 }}
+                                                />
+
+                                                {/* Animated Tracing Dot */}
+                                                {animatedDotConfig.y !== null && (
+                                                    <ReferenceDot
+                                                        x={animatedDotConfig.x}
+                                                        y={animatedDotConfig.y as number}
+                                                        r={6}
+                                                        fill="#fff"
+                                                        stroke={getThemeColor()}
+                                                        strokeWidth={3}
+                                                        isFront={true}
+                                                        className="transition-none shadow-xl drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                                                    />
+                                                )}
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+
+                                {/* Equation Display Overlay */}
+                                <div className="absolute bottom-6 left-1/2 -translate-x-1/2  glass-panel px-6 py-3 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                                    <p className="font-mono text-xl tracking-wider text-slate-200">
+                                        {getEquationString()}
+                                    </p>
                                 </div>
                             </div>
 
-                            {/* Equation Display Overlay */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2  glass-panel px-6 py-3 rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                                <p className="font-mono text-xl tracking-wider text-slate-200">
-                                    {getEquationString()}
+                            {/* Educational Math Panel with Static Geometric Triangle */}
+                            <div className="glass-panel rounded-2xl p-6 relative flex flex-col md:flex-row items-center gap-6 overflow-hidden">
+                                <div className="flex-1 space-y-3 z-10">
+                                    <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-200">
+                                        <Triangle className={`w-5 h-5`} style={{ color: getThemeColor() }} />
+                                        Significado Matemático
+                                    </h3>
+                                    <p className="text-slate-400 leading-relaxed transition-all duration-300">
+                                        {getMathMeaning()}
+                                    </p>
+                                </div>
+
+                                <div className="w-[180px] h-[180px] bg-slate-900/60 rounded-xl border border-slate-700/50 p-2 flex-shrink-0 relative overflow-hidden">
+                                    <svg viewBox="-1.2 -1.2 2.4 2.4" className="w-full h-full overflow-visible">
+                                        {/* Axes */}
+                                        <line x1="-1.2" y1="0" x2="1.2" y2="0" stroke="#475569" strokeWidth="0.02" />
+                                        <line x1="0" y1="-1.2" x2="0" y2="1.2" stroke="#475569" strokeWidth="0.02" />
+
+                                        {/* The Circle */}
+                                        <circle cx="0" cy="0" r="1" fill="transparent" stroke="#334155" strokeWidth="0.03" />
+
+                                        {/* Static Angle for the Triangle (approx 45 degrees / pi/4) */}
+                                        {(() => {
+                                            const angle = Math.PI / 4;
+                                            const cosA = Math.cos(angle);
+                                            const sinA = Math.sin(angle);
+                                            const tanA = Math.tan(angle);
+                                            const secA = 1 / cosA;
+                                            const cscA = 1 / sinA;
+                                            const tc = getThemeColor();
+
+                                            return (
+                                                <>
+                                                    {/* Base Triangle (Always faint) */}
+                                                    <polygon points={`0,0 ${cosA},0 ${cosA},${-sinA}`} fill={`${tc}20`} stroke="none" />
+
+                                                    {/* Angle Arc */}
+                                                    <path d={`M 0.3 0 A 0.3 0.3 0 0 0 ${0.3 * cosA} ${-0.3 * sinA}`} fill="none" stroke="#94a3b8" strokeWidth="0.02" />
+
+                                                    {/* Hypotenuse (Radius) */}
+                                                    <line x1="0" y1="0" x2={cosA} y2={-sinA} stroke="#94a3b8" strokeWidth="0.03" />
+
+                                                    {/* Highlights based on function */}
+                                                    {funcType === 'Seno' && (
+                                                        <>
+                                                            <line x1="0" y1="0" x2={cosA} y2="0" stroke="#64748b" strokeWidth="0.04" /> {/* Adj */}
+                                                            <line x1={cosA} y1={-sinA} x2={cosA} y2="0" stroke="#64748b" strokeWidth="0.03" strokeDasharray="0.05,0.05" />
+                                                            <line x1={cosA} y1={0} x2={cosA} y2={-sinA} stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Opp (Sine) */}
+                                                        </>
+                                                    )}
+                                                    {funcType === 'Cosseno' && (
+                                                        <>
+                                                            <line x1={cosA} y1="0" x2={cosA} y2={-sinA} stroke="#64748b" strokeWidth="0.04" /> {/* Opp */}
+                                                            <line x1="0" y1="0" x2={cosA} y2="0" stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Adj (Cosine) */}
+                                                        </>
+                                                    )}
+                                                    {funcType === 'Tangente' && (
+                                                        <>
+                                                            <line x1="0" y1="0" x2={1} y2={-tanA} stroke="#64748b" strokeWidth="0.03" strokeDasharray="0.05,0.05" /> {/* Extended Hyp */}
+                                                            <polygon points={`0,0 1,0 1,${-tanA}`} fill={`${tc}10`} stroke="none" />
+                                                            <line x1="1" y1="0" x2="1" y2={-tanA} stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Tangent Line */}
+                                                            <line x1="0" y1="0" x2="1" y2="0" stroke="#64748b" strokeWidth="0.04" /> {/* Adj (r=1) */}
+                                                        </>
+                                                    )}
+                                                    {funcType === 'Secante' && (
+                                                        <>
+                                                            <line x1="0" y1="0" x2={secA} y2="0" stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Secant Line */}
+                                                            <line x1="1" y1="0" x2="1" y2={-tanA} stroke="#64748b" strokeWidth="0.04" /> {/* Tangent Op */}
+                                                            <line x1="0" y1="0" x2={secA} y2="0" stroke={`${tc}40`} strokeWidth="0.1" />
+                                                            <line x1="0" y1="0" x2={1} y2={-tanA} stroke="#94a3b8" strokeWidth="0.03" /> {/* Extended Hyp */}
+                                                        </>
+                                                    )}
+                                                    {funcType === 'Cotangente' && (
+                                                        <>
+                                                            <line x1="0" y1="0" x2={1 / tanA} y2="-1" stroke="#64748b" strokeWidth="0.03" strokeDasharray="0.05,0.05" /> {/* Extended Hyp */}
+                                                            <polygon points={`0,0 0,-1 ${1 / tanA},-1`} fill={`${tc}10`} stroke="none" />
+                                                            <line x1="0" y1="-1" x2={1 / tanA} y2="-1" stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Cotangent Line */}
+                                                            <line x1="0" y1="0" x2="0" y2="-1" stroke="#64748b" strokeWidth="0.04" /> {/* Opp (r=1) */}
+                                                        </>
+                                                    )}
+                                                    {funcType === 'Cossecante' && (
+                                                        <>
+                                                            <line x1="0" y1="0" x2="0" y2={-cscA} stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Cosecant Line */}
+                                                            <line x1="0" y1="-1" x2={1 / tanA} y2="-1" stroke="#64748b" strokeWidth="0.04" /> {/* Cotangent Adj */}
+                                                            <line x1="0" y1="0" x2="0" y2={-cscA} stroke={`${tc}40`} strokeWidth="0.1" />
+                                                            <line x1="0" y1="0" x2={1 / tanA} y2="-1" stroke="#94a3b8" strokeWidth="0.03" /> {/* Extended Hyp */}
+                                                        </>
+                                                    )}
+
+                                                    {/* Point at the circle edge (always drawn) */}
+                                                    <circle cx={cosA} cy={-sinA} r="0.06" fill="#fff" stroke={tc} strokeWidth="0.03" />
+                                                </>
+                                            );
+                                        })()}
+                                    </svg>
+                                    <div className="absolute bottom-2 right-2 text-[9px] text-slate-500 font-mono bg-slate-900/80 px-1 rounded">
+                                        θ = π/4
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Educational Physics Panel */}
+                            <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-700">
+                                    <CircleIcon className="w-32 h-32" />
+                                </div>
+                                <h3 className="text-lg font-semibold mb-3 text-slate-200">Significado Físico</h3>
+                                <p className="text-slate-400 leading-relaxed max-w-3xl relative z-10 transition-all duration-300">
+                                    {getPhysicalMeaning()}
                                 </p>
                             </div>
-                        </div>
 
-                        {/* Educational Math Panel with Static Geometric Triangle */}
-                        <div className="glass-panel rounded-2xl p-6 relative flex flex-col md:flex-row items-center gap-6 overflow-hidden">
-                            <div className="flex-1 space-y-3 z-10">
-                                <h3 className="text-lg font-semibold flex items-center gap-2 text-slate-200">
-                                    <Triangle className={`w-5 h-5`} style={{ color: getThemeColor() }} />
-                                    Significado Matemático
+                            {/* YouTube Video Panel */}
+                            <div className="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col gap-4">
+                                <h3 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
+                                    Mergulhe Fundo (Videoaula Khan Academy)
                                 </h3>
-                                <p className="text-slate-400 leading-relaxed transition-all duration-300">
-                                    {getMathMeaning()}
-                                </p>
-                            </div>
-
-                            <div className="w-[180px] h-[180px] bg-slate-900/60 rounded-xl border border-slate-700/50 p-2 flex-shrink-0 relative overflow-hidden">
-                                <svg viewBox="-1.2 -1.2 2.4 2.4" className="w-full h-full overflow-visible">
-                                    {/* Axes */}
-                                    <line x1="-1.2" y1="0" x2="1.2" y2="0" stroke="#475569" strokeWidth="0.02" />
-                                    <line x1="0" y1="-1.2" x2="0" y2="1.2" stroke="#475569" strokeWidth="0.02" />
-
-                                    {/* The Circle */}
-                                    <circle cx="0" cy="0" r="1" fill="transparent" stroke="#334155" strokeWidth="0.03" />
-
-                                    {/* Static Angle for the Triangle (approx 45 degrees / pi/4) */}
-                                    {(() => {
-                                        const angle = Math.PI / 4;
-                                        const cosA = Math.cos(angle);
-                                        const sinA = Math.sin(angle);
-                                        const tanA = Math.tan(angle);
-                                        const secA = 1 / cosA;
-                                        const cscA = 1 / sinA;
-                                        const tc = getThemeColor();
-
-                                        return (
-                                            <>
-                                                {/* Base Triangle (Always faint) */}
-                                                <polygon points={`0,0 ${cosA},0 ${cosA},${-sinA}`} fill={`${tc}20`} stroke="none" />
-
-                                                {/* Angle Arc */}
-                                                <path d={`M 0.3 0 A 0.3 0.3 0 0 0 ${0.3 * cosA} ${-0.3 * sinA}`} fill="none" stroke="#94a3b8" strokeWidth="0.02" />
-
-                                                {/* Hypotenuse (Radius) */}
-                                                <line x1="0" y1="0" x2={cosA} y2={-sinA} stroke="#94a3b8" strokeWidth="0.03" />
-
-                                                {/* Highlights based on function */}
-                                                {funcType === 'Seno' && (
-                                                    <>
-                                                        <line x1="0" y1="0" x2={cosA} y2="0" stroke="#64748b" strokeWidth="0.04" /> {/* Adj */}
-                                                        <line x1={cosA} y1={-sinA} x2={cosA} y2="0" stroke="#64748b" strokeWidth="0.03" strokeDasharray="0.05,0.05" />
-                                                        <line x1={cosA} y1={0} x2={cosA} y2={-sinA} stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Opp (Sine) */}
-                                                    </>
-                                                )}
-                                                {funcType === 'Cosseno' && (
-                                                    <>
-                                                        <line x1={cosA} y1="0" x2={cosA} y2={-sinA} stroke="#64748b" strokeWidth="0.04" /> {/* Opp */}
-                                                        <line x1="0" y1="0" x2={cosA} y2="0" stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Adj (Cosine) */}
-                                                    </>
-                                                )}
-                                                {funcType === 'Tangente' && (
-                                                    <>
-                                                        <line x1="0" y1="0" x2={1} y2={-tanA} stroke="#64748b" strokeWidth="0.03" strokeDasharray="0.05,0.05" /> {/* Extended Hyp */}
-                                                        <polygon points={`0,0 1,0 1,${-tanA}`} fill={`${tc}10`} stroke="none" />
-                                                        <line x1="1" y1="0" x2="1" y2={-tanA} stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Tangent Line */}
-                                                        <line x1="0" y1="0" x2="1" y2="0" stroke="#64748b" strokeWidth="0.04" /> {/* Adj (r=1) */}
-                                                    </>
-                                                )}
-                                                {funcType === 'Secante' && (
-                                                    <>
-                                                        <line x1="0" y1="0" x2={secA} y2="0" stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Secant Line */}
-                                                        <line x1="1" y1="0" x2="1" y2={-tanA} stroke="#64748b" strokeWidth="0.04" /> {/* Tangent Op */}
-                                                        <line x1="0" y1="0" x2={secA} y2="0" stroke={`${tc}40`} strokeWidth="0.1" />
-                                                        <line x1="0" y1="0" x2={1} y2={-tanA} stroke="#94a3b8" strokeWidth="0.03" /> {/* Extended Hyp */}
-                                                    </>
-                                                )}
-                                                {funcType === 'Cotangente' && (
-                                                    <>
-                                                        <line x1="0" y1="0" x2={1 / tanA} y2="-1" stroke="#64748b" strokeWidth="0.03" strokeDasharray="0.05,0.05" /> {/* Extended Hyp */}
-                                                        <polygon points={`0,0 0,-1 ${1 / tanA},-1`} fill={`${tc}10`} stroke="none" />
-                                                        <line x1="0" y1="-1" x2={1 / tanA} y2="-1" stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Cotangent Line */}
-                                                        <line x1="0" y1="0" x2="0" y2="-1" stroke="#64748b" strokeWidth="0.04" /> {/* Opp (r=1) */}
-                                                    </>
-                                                )}
-                                                {funcType === 'Cossecante' && (
-                                                    <>
-                                                        <line x1="0" y1="0" x2="0" y2={-cscA} stroke={tc} strokeWidth="0.08" strokeLinecap="round" /> {/* Cosecant Line */}
-                                                        <line x1="0" y1="-1" x2={1 / tanA} y2="-1" stroke="#64748b" strokeWidth="0.04" /> {/* Cotangent Adj */}
-                                                        <line x1="0" y1="0" x2="0" y2={-cscA} stroke={`${tc}40`} strokeWidth="0.1" />
-                                                        <line x1="0" y1="0" x2={1 / tanA} y2="-1" stroke="#94a3b8" strokeWidth="0.03" /> {/* Extended Hyp */}
-                                                    </>
-                                                )}
-
-                                                {/* Point at the circle edge (always drawn) */}
-                                                <circle cx={cosA} cy={-sinA} r="0.06" fill="#fff" stroke={tc} strokeWidth="0.03" />
-                                            </>
-                                        );
-                                    })()}
-                                </svg>
-                                <div className="absolute bottom-2 right-2 text-[9px] text-slate-500 font-mono bg-slate-900/80 px-1 rounded">
-                                    θ = π/4
+                                <div className="relative w-full overflow-hidden rounded-xl border border-slate-700/50" style={{ paddingTop: '56.25%' }}>
+                                    <iframe
+                                        className="absolute top-0 left-0 w-full h-full"
+                                        src={`https://www.youtube.com/embed/${getYoutubeVideoId()}`}
+                                        title="YouTube video player"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowFullScreen>
+                                    </iframe>
                                 </div>
                             </div>
+
                         </div>
 
-                        {/* Educational Physics Panel */}
-                        <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-700">
-                                <CircleIcon className="w-32 h-32" />
+                        {/* Right Column: Controls */}
+                        <div className="lg:col-span-1 glass-panel rounded-2xl p-6 flex flex-col">
+                            <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/50">
+                                <h2 className="text-lg font-semibold text-slate-200">Parâmetros</h2>
+                                <button
+                                    onClick={resetParams}
+                                    className="p-2 rounded-lg hover:bg-slate-700/50 text-slate-400 hover:text-white transition-colors group"
+                                    title="Resetar parâmetros"
+                                >
+                                    <RotateCcw className="w-4 h-4 group-hover:-rotate-90 transition-transform duration-300" />
+                                </button>
                             </div>
-                            <h3 className="text-lg font-semibold mb-3 text-slate-200">Significado Físico</h3>
-                            <p className="text-slate-400 leading-relaxed max-w-3xl relative z-10 transition-all duration-300">
-                                {getPhysicalMeaning()}
-                            </p>
-                        </div>
 
-                        {/* YouTube Video Panel */}
-                        <div className="glass-panel rounded-2xl p-6 relative overflow-hidden flex flex-col gap-4">
-                            <h3 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
-                                Mergulhe Fundo (Videoaula Khan Academy)
-                            </h3>
-                            <div className="relative w-full overflow-hidden rounded-xl border border-slate-700/50" style={{ paddingTop: '56.25%' }}>
-                                <iframe
-                                    className="absolute top-0 left-0 w-full h-full"
-                                    src={`https://www.youtube.com/embed/${getYoutubeVideoId()}`}
-                                    title="YouTube video player"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowFullScreen>
-                                </iframe>
+                            <div className="flex flex-col gap-6 flex-grow">
+
+                                {/* Control Variable A */}
+                                <ControlSlider
+                                    label="Amplitude (A)"
+                                    value={params.A}
+                                    min={0.1} max={5} step={0.1}
+                                    onChange={(v) => handleParamChange('A', v)}
+                                    themeColor={getThemeColor()}
+                                    description="Estica ou comprime verticalmente. Intensidade da onda."
+                                />
+
+                                {/* Control Variable B */}
+                                <ControlSlider
+                                    label="Frequência (B)"
+                                    value={params.B}
+                                    min={0.5} max={5} step={0.5}
+                                    onChange={(v) => handleParamChange('B', v)}
+                                    themeColor={getThemeColor()}
+                                    description="Comprime horizontalmente. Quantidade de ciclos."
+                                />
+
+                                {/* Control Variable C */}
+                                <ControlSlider
+                                    label="Fase (C)"
+                                    value={params.C}
+                                    min={-Math.PI} max={Math.PI} step={Math.PI / 4}
+                                    onChange={(v) => handleParamChange('C', v)}
+                                    themeColor={getThemeColor()}
+                                    description="Desloca a onda horizontalmente (no tempo)."
+                                    formatValue={(v) => `${(v / Math.PI).toFixed(2)}π`}
+                                />
+
+                                {/* Control Variable D */}
+                                <ControlSlider
+                                    label="Desloc. Vertical (D)"
+                                    value={params.D}
+                                    min={-3} max={3} step={0.5}
+                                    onChange={(v) => handleParamChange('D', v)}
+                                    themeColor={getThemeColor()}
+                                    description="Desloca a onda verticalmente (bias)."
+                                />
+
                             </div>
                         </div>
 
                     </div>
+                ) : null
+                }
 
-                    {/* Right Column: Controls */}
-                    <div className="lg:col-span-1 glass-panel rounded-2xl p-6 flex flex-col">
-                        <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/50">
-                            <h2 className="text-lg font-semibold text-slate-200">Parâmetros</h2>
-                            <button
-                                onClick={resetParams}
-                                className="p-2 rounded-lg hover:bg-slate-700/50 text-slate-400 hover:text-white transition-colors group"
-                                title="Resetar parâmetros"
-                            >
-                                <RotateCcw className="w-4 h-4 group-hover:-rotate-90 transition-transform duration-300" />
-                            </button>
-                        </div>
+                {currentView === 'properties' && <PropertiesDashboard />}
+                {currentView === 'reciprocals' && <PropertiesReciprocalDashboard />}
+                {currentView === 'volumes' && <VolumeSimulator />}
 
-                        <div className="flex flex-col gap-6 flex-grow">
-
-                            {/* Control Variable A */}
-                            <ControlSlider
-                                label="Amplitude (A)"
-                                value={params.A}
-                                min={0.1} max={5} step={0.1}
-                                onChange={(v) => handleParamChange('A', v)}
-                                themeColor={getThemeColor()}
-                                description="Estica ou comprime verticalmente. Intensidade da onda."
-                            />
-
-                            {/* Control Variable B */}
-                            <ControlSlider
-                                label="Frequência (B)"
-                                value={params.B}
-                                min={0.5} max={5} step={0.5}
-                                onChange={(v) => handleParamChange('B', v)}
-                                themeColor={getThemeColor()}
-                                description="Comprime horizontalmente. Quantidade de ciclos."
-                            />
-
-                            {/* Control Variable C */}
-                            <ControlSlider
-                                label="Fase (C)"
-                                value={params.C}
-                                min={-Math.PI} max={Math.PI} step={Math.PI / 4}
-                                onChange={(v) => handleParamChange('C', v)}
-                                themeColor={getThemeColor()}
-                                description="Desloca a onda horizontalmente (no tempo)."
-                                formatValue={(v) => `${(v / Math.PI).toFixed(2)}π`}
-                            />
-
-                            {/* Control Variable D */}
-                            <ControlSlider
-                                label="Desloc. Vertical (D)"
-                                value={params.D}
-                                min={-3} max={3} step={0.5}
-                                onChange={(v) => handleParamChange('D', v)}
-                                themeColor={getThemeColor()}
-                                description="Desloca a onda verticalmente (bias)."
-                            />
-
-                        </div>
-                    </div>
-
-                </div>
-            ) : null
-            }
-
-            {currentView === 'properties' && <PropertiesDashboard />}
-            {currentView === 'reciprocals' && <PropertiesReciprocalDashboard />}
-
+            </main>
         </div >
     );
 }
