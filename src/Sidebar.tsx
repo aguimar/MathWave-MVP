@@ -1,6 +1,6 @@
 import { Activity, LayoutDashboard, Calculator, Library, Box, Layers, Binary, CircleDot, TrendingUp } from 'lucide-react';
 
-export type ViewType = 'simulator' | 'properties' | 'volumes' | 'trigcircle' | 'logdash' | 'logexplainer';
+export type ViewType = 'simulator' | 'properties' | 'volumes' | 'trigcircle' | 'logdash' | 'logexplainer' | 'expexplainer';
 
 interface SidebarProps {
     currentView: ViewType;
@@ -94,17 +94,6 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
                     </h3>
                     <div className="space-y-1">
                         <button
-                            onClick={() => setCurrentView('logdash')}
-                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${currentView === 'logdash'
-                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
-                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transparent border border-transparent'
-                                }`}
-                        >
-                            <TrendingUp className="w-4 h-4" />
-                            Logaritmos & Exponenciais
-                        </button>
-
-                        <button
                             onClick={() => setCurrentView('logexplainer')}
                             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${currentView === 'logexplainer'
                                 ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
@@ -113,6 +102,28 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
                         >
                             <Binary className="w-4 h-4" />
                             Logaritmos
+                        </button>
+
+                        <button
+                            onClick={() => setCurrentView('expexplainer')}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${currentView === 'expexplainer'
+                                ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transparent border border-transparent'
+                                }`}
+                        >
+                            <TrendingUp className="w-4 h-4" />
+                            Exponenciais
+                        </button>
+
+                        <button
+                            onClick={() => setCurrentView('logdash')}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${currentView === 'logdash'
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transparent border border-transparent'
+                                }`}
+                        >
+                            <TrendingUp className="w-4 h-4" />
+                            Log & Exponenciais
                         </button>
                     </div>
                 </div>

@@ -25,10 +25,10 @@ function buildLogData(base: number) {
 
 // ── Video cards (verified IDs) ───────────────────────────────────────────────
 const VIDEOS = [
-    { id: 'FwTbL4hewlY', title: 'Logaritmos: Introdução e Definição', channel: 'Equaciona Com Paulo Pereira' },
-    { id: 'aZwiSteCpck', title: 'Propriedades dos Logaritmos', channel: 'Dicasdemat Sandro Curió' },
-    { id: 'Q3GU5qWQUT0', title: 'Mudança de Base dos Logaritmos', channel: 'Equaciona Com Paulo Pereira' },
-    { id: 'vUvWnRDcBrc', title: 'Logaritmos Naturais — ln(x)', channel: 'Dicasdemat Sandro Curió' },
+    { id: 'tR6S4dz6UGA', title: 'APRENDA LOGARITMO EM 8 MINUTOS | RÁPIDO e FÁCIL', channel: 'Dicasdemat Sandro Curió' },
+    { id: '3gNGS4vzM_o', title: 'Logaritmo: Propriedades Operatórias', channel: 'Prof. Ferretto | ENEM e Vestibulares' },
+    { id: 'tR6S4dz6UGA', title: 'Logaritmo — Definição e Exemplos', channel: 'Dicasdemat Sandro Curió' },
+    { id: '3gNGS4vzM_o', title: 'Leis dos Logaritmos com Exercícios', channel: 'Prof. Ferretto | ENEM e Vestibulares' },
 ];
 
 // ── Sub-components ───────────────────────────────────────────────────────────
